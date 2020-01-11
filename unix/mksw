@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export GOARCH_TARGET=sw64
+
+CC=/usr/sw/swgcc530-sw6-cross/usr/bin/gcc5 GOARCH=sw64 ~/codes/go-sw64/bin/go \
+  tool cgo -godefs linux/types_sw64.go | go run mkpost_sw64.go > ztypes_linux_sw64.go
+
+./mkerrors_sw64.sh |gofmt >zerrors_linux_sw64.go
+
+./mksysnum_linux.pl /usr/sw/swgcc530-sw6-cross/usr/include/asm/unistd.h |gofmt >zsysnum_linux_sw64.go
+
+go run mksyscall.go -tags linux,sw64 syscall_linux.go syscall_linux_sw64.go |gofmt >zsyscall_linux_sw64.go
+
